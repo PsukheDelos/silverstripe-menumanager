@@ -97,6 +97,26 @@ class MenuItem extends DataObject implements PermissionProvider
     }
 
     /**
+     * Returns a default title for MenuItems for CMS functionality that
+     * requires it (i.e. GridField Relation Search and CMS Breadcrumbs)
+     *
+     * The Title returned is displayed as "Page.Title > MenuTitle [$ID]"
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        $title = '';
+        if($page = $this->Page()) {
+            $title = $page->Title . " > ";
+        }
+        //If MenuTitle is unset, defaults to Page.Title
+        //So the case can never arise where "Page.Title > [#ID]"
+        $title .= $this->MenuTitle;
+        return trim("$title [#$this->ID]", ' >');
+    }
+
+    /**
      * @return FieldList
      */
     public function getCMSFields()
